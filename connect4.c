@@ -8,13 +8,14 @@
 
 int main(int argc, char **argv)
 {
-	srand (time(NULL));
 	board_type *board = createBoard(7,6);
-
 	int input;
+
+	srand (time(NULL));
+
 	while((winnerIs(board)==0) && validMovesLeft(board))
 	{
-		if(cp(board) == PLAYER_ONE)	
+		if(getPlayer(board) == PLAYER_ONE)	
 		{
 			do
 			{

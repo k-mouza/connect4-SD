@@ -10,7 +10,8 @@ int getRandomPlayerMove(board_type *board)
 	int val = -1;
 	int columns = board->cols;
 	int possible[columns];
-	int i, rad;
+	int i;
+	int rad; //random number between 0 and 6
 	
 	for(i=0; i<columns; i++)
 	{
@@ -22,7 +23,7 @@ int getRandomPlayerMove(board_type *board)
 
 	while(val == -1)
 	{
-		rad = rand() % columns;
+		rad = rand() % (columns-1);
 		if(possible[rad] == 1)
 			val = rad;
 	}

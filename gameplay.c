@@ -145,6 +145,8 @@ point_type*** generateCL(point_type ***grid)
 
 board_type * createBoard(int a, int b)
 {
+	int x, y;
+	
 	board_type *board = (board_type*)malloc(sizeof(board_type));
 	board->cols=a;
 	board->rows=b;
@@ -152,12 +154,12 @@ board_type * createBoard(int a, int b)
 	board->cp=PLAYER_ONE;
 	board->heights = (int *)malloc(board->cols * sizeof(int));
 	board->grid = (point_type ***)malloc(board->cols * sizeof(point_type **));
-	int x;
-	int y;
+	
 	for(x = 0; x < board->cols; x++)
 	{
 		board->grid[x] =(point_type **)malloc(board->rows * sizeof(point_type *));
 		board->heights[x] = 0;
+		
 		for(y = 0; y< board->rows; y++)
 		{
 			board->grid[x][y] = newPoint(x,y);
@@ -255,7 +257,7 @@ int winnerIs(board_type *board)
 }
 
 
-int cp(board_type *board)
+int getPlayer(board_type *board)
 {
 	return board->cp;
 }
