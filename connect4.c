@@ -8,8 +8,8 @@
 
 int main(int argc, char **argv)
 {
-	board_type *board = createBoard(7,6);
 	int input;
+	board_type *board = createBoard(7,6);
 
 	srand (time(NULL));
 
@@ -19,7 +19,9 @@ int main(int argc, char **argv)
 		{
 			do
 			{
+				printf("Insert column number: ");
 				scanf("%d", &input);
+				printf("\n");
 				
 				if(input < 0 || input > board->cols-1)
 					printf("Provide a column number between 0 and %d\n", board->cols-1);
@@ -31,9 +33,20 @@ int main(int argc, char **argv)
 			makeMove(board,input);// Make it so!
 		}
 		else
+		{
+			printf("Computer playing.\n");
 			makeMove(board, getReasonedMove(board));// Make it so!
+		}
 
 		toString(board);
 	}
+	
+	if(winnerIs(board) == PLAYER_ONE)
+		printf("Player 1 is the winner !!!\n\n");
+	else
+		printf("Player 2 is the winner !!!\n\n");
+		
+	deleteboard(board);
+	
 	return 0;
 }

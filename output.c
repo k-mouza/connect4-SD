@@ -6,14 +6,17 @@
 void toString(board_type *board)
 {
 	int y, x;
+	point_type *curr_point;
 	
 	for(y=board->rows-1; y>=0; y--)
 	{
 		for(x=0; x<board->cols; x++)
 		{
-			if(getState(board->grid[x][y]) == EMPTY)
+			curr_point = board->grid[x][y];
+			
+			if(getState(curr_point) == EMPTY)
 				printf("-");
-			else if(getState(board->grid[x][y])==PLAYER_ONE)
+			else if(getState(curr_point) == PLAYER_ONE)
 				printf("O");
 			else
 				printf("X");

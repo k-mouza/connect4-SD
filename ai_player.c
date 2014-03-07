@@ -7,11 +7,11 @@
 int getRandomPlayerMove(board_type *board)
 {
 	//Replaced 7 with columns in whole function
-	int val = -1;
+	int ret = -1;
 	int columns = board->cols;
 	int possible[columns];
 	int i;
-	int rad; //random number between 0 and 6
+	int rand_col; //random column number between 0 and 6
 	
 	for(i=0; i<columns; i++)
 	{
@@ -21,14 +21,14 @@ int getRandomPlayerMove(board_type *board)
 			possible[i] = 0;
 	}
 
-	while(val == -1)
+	while(ret == -1)
 	{
-		rad = rand() % (columns-1);
-		if(possible[rad] == 1)
-			val = rad;
+		rand_col = rand() % (columns-1);
+		if(possible[rand_col] == 1)
+			ret = rand_col;
 	}
 	
-	return val;
+	return ret;
 }
 
 
@@ -37,11 +37,12 @@ int getStrength(board_type *board)
 	int sum=0;
 	int weights[5] = {0,1,10,50,600};
 	int i;
-	int score = getScore(board->cl[i]);
+	int score;
 	
 	for(i=0; i<QUARTETS; i++)
 	{
-		sum += (score > 0) ? weights[abs(score)] : -weights[abs(score)];
+		score = getScore(board->cl[i]);
+		sum += (score > 0) ? weights[score] : -weights[-score];
 	}
 	
 	return sum + ((board->cp == PLAYER_ONE) ? 16 : -16);

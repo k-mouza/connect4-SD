@@ -4,9 +4,14 @@
 #include "gameplay.h"
 
 
-point_type * newPoint(int a, int b)
+point_type* newPoint(int a, int b)
 {
 	point_type *point = (point_type*)malloc(sizeof(point_type));
+	if(!point)
+	{
+		printf("Not enough memory. Exiting...\n");
+		exit(-1);
+	}
 	point->x = a;
 	point->y = b;
 	point->state = EMPTY;
@@ -20,7 +25,7 @@ void deletepoint(point_type *point)
 }
 
 
-int equalsPosition(point_type * a, point_type* b)
+int equalsPosition(point_type *a, point_type *b)
 {
 	return (a->x == b->x) && (a->y == b->y); //added parenthesis for readability
 }
@@ -38,6 +43,12 @@ int getState(point_type *point)
 }
 
 
+int getPlayer(board_type *board)
+{
+	return board->cp;
+}
+
+
 point_type*** generateCL(point_type ***grid)
 {
 	int i, y, x, t;
@@ -49,7 +60,7 @@ point_type*** generateCL(point_type ***grid)
 		printf("Not enough memory. Exiting...\n");
 		exit(-1);
 	}
-	for(i=0; i<QUARTETS; i++)
+/*	for(i=0; i<QUARTETS; i++)
 	{
 		lines[i] = (point_type **)malloc(4 * sizeof(point_type *));
 		if(!lines[i])
@@ -58,7 +69,7 @@ point_type*** generateCL(point_type ***grid)
 			exit(-1);
 		}
 	}
-
+*/
 	for(y=0; y<6; y++)
 	{
 		for(x=0; x<4; x++)
@@ -143,39 +154,66 @@ point_type*** generateCL(point_type ***grid)
 }
 
 
-board_type * createBoard(int a, int b)
+board_type* createBoard(int a, int b)
 {
 	int x, y;
-	
+
 	board_type *board = (board_type*)malloc(sizeof(board_type));
-	board->cols=a;
-	board->rows=b;
-	board->lm=-1;
-	board->cp=PLAYER_ONE;
+	if(!board)
+	{
+		printf("Not enough memory. Exiting...\n");
+		exit(-1);
+	}
+	
+	board->cols = a;
+	board->rows = b;
+	board->lm = -1;
+	board->cp = PLAYER_ONE;
 	board->heights = (int *)malloc(board->cols * sizeof(int));
 	board->grid = (point_type ***)malloc(board->cols * sizeof(point_type **));
+	board->moves = (int *)malloc(board->cols * board->rows * sizeof(int));
 	
+	if(!board->heights || !board->grid || !board->moves)
+	{
+		printf("Not enough memory. Exiting...\n");
+		exit(-1);
+	}
+
 	for(x = 0; x < board->cols; x++)
 	{
 		board->grid[x] =(point_type **)malloc(board->rows * sizeof(point_type *));
 		board->heights[x] = 0;
-		
+
 		for(y = 0; y< board->rows; y++)
 		{
 			board->grid[x][y] = newPoint(x,y);
 		}
 	}
-	board->moves = (int *)malloc(board->cols * board->rows * sizeof(int));
-
+	
 	board->cl = generateCL(board->grid);
+	
 	return board;
 }
 
 
 void deleteboard(board_type* board)
 {
+	int i, x, y;
+	
+	for(i=0; i<QUARTETS; i++)
+		free(board->cl[i]);
 	free(board->cl);
+	
+	for(x=0; x<board->cols; x++)
+	{
+		for(y=0; y<board->rows; y++)
+		{
+			deletepoint(board->grid[x][y]);
+		}
+		free(board->grid[x]);
+	}
 	free(board->grid);
+	
 	free(board->heights);
 	free(board->moves);
 	free(board);
@@ -254,10 +292,4 @@ int winnerIs(board_type *board)
 	}
 	
 	return 0;
-}
-
-
-int getPlayer(board_type *board)
-{
-	return board->cp;
 }
