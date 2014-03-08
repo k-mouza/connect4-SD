@@ -43,8 +43,10 @@ int main(int argc, char **argv)
 	
 	if(winnerIs(board) == PLAYER_ONE)
 		printf("Player 1 is the winner !!!\n\n");
-	else
+	else if(winnerIs(board) == PLAYER_TWO)
 		printf("Player 2 is the winner !!!\n\n");
+	else
+		printf("It's a tie\n\n");
 		
 	deleteboard(board);
 	

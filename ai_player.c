@@ -101,7 +101,7 @@ int maxValue(board_type *board, int ply)
 			else 
 				moves[i] = -getStrength(board);
 			
-			if(moves[i] < moves[highest])
+			if(moves[i] > moves[highest])
 				highest = i;
 			
 			undoMove(board);
