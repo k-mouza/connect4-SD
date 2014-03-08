@@ -41,11 +41,11 @@ int getStrength(board_type *board)
 	
 	for(i=0; i<QUARTETS; i++)
 	{
-		score = getScore(board->cl[i]);
+		score = getScore(board->win_lines[i]);
 		sum += (score > 0) ? weights[score] : -weights[-score];
 	}
 	
-	return sum + ((board->cp == PLAYER_ONE) ? 16 : -16);
+	return sum + ((board->curr_pl == PLAYER_ONE) ? 16 : -16);
 }
 
 

@@ -1,2 +1,3 @@
 *.o
 connect4
+testing/test-all

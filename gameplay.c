@@ -45,11 +45,11 @@ int getState(point_type *point)
 
 int getPlayer(board_type *board)
 {
-	return board->cp;
+	return board->curr_pl;
 }
 
 
-point_type*** generateCL(point_type ***grid)
+point_type*** generateWinLines(point_type ***grid)
 {
 	int i, y, x, t;
 	int count = 0;
@@ -167,8 +167,8 @@ board_type* createBoard(int a, int b)
 	
 	board->cols = a;
 	board->rows = b;
-	board->lm = -1;
-	board->cp = PLAYER_ONE;
+	board->moves_made = -1;
+	board->curr_pl = PLAYER_ONE;
 	board->heights = (int *)malloc(board->cols * sizeof(int));
 	board->grid = (point_type ***)malloc(board->cols * sizeof(point_type **));
 	board->moves = (int *)malloc(board->cols * board->rows * sizeof(int));
@@ -182,6 +182,12 @@ board_type* createBoard(int a, int b)
 	for(x = 0; x < board->cols; x++)
 	{
 		board->grid[x] =(point_type **)malloc(board->rows * sizeof(point_type *));
+		if(!board->grid[x])
+		{
+			printf("Not enough memory. Exiting...\n");
+			exit(-1);
+		}
+		
 		board->heights[x] = 0;
 
 		for(y = 0; y< board->rows; y++)
@@ -190,7 +196,7 @@ board_type* createBoard(int a, int b)
 		}
 	}
 	
-	board->cl = generateCL(board->grid);
+	board->win_lines = generateWinLines(board->grid);
 	
 	return board;
 }
@@ -201,8 +207,8 @@ void deleteboard(board_type* board)
 	int i, x, y;
 	
 	for(i=0; i<QUARTETS; i++)
-		free(board->cl[i]);
-	free(board->cl);
+		free(board->win_lines[i]);
+	free(board->win_lines);
 	
 	for(x=0; x<board->cols; x++)
 	{
@@ -230,31 +236,31 @@ void makeMove(board_type *board, int column)
 {
 	int row = board->heights[column];
 	
-	setState(board->grid[column][row], board->cp);
+	setState(board->grid[column][row], board->curr_pl);
 
 	board->heights[column]++;
-	board->lm++;
-	board->moves[board->lm] = column;
-	board->cp = -board->cp;
+	board->moves_made++;
+	board->moves[board->moves_made] = column;
+	board->curr_pl = -board->curr_pl;
 }
 
 
 void undoMove(board_type *board)
 {
-	int column = board->moves[board->lm];
-	int row = board->heights[board->moves[board->lm]]-1;
+	int column = board->moves[board->moves_made];
+	int row = board->heights[board->moves[board->moves_made]]-1;
 	
 	setState(board->grid[column][row], EMPTY);
 	
 	board->heights[column]--;
-	board->lm--;
-	board->cp = -board->cp;
+	board->moves_made--;
+	board->curr_pl = -board->curr_pl;
 }
 
 
 int validMovesLeft(board_type *board)
 {
-	return board->lm < ((board->cols * board->rows)-1);
+	return board->moves_made < ((board->cols * board->rows)-1);
 }
 
 
@@ -285,9 +291,9 @@ int winnerIs(board_type *board)
 	
 	for(i=0; i<QUARTETS; i++)
 	{
-		if(getScore(board->cl[i]) == 4)
+		if(getScore(board->win_lines[i]) == 4)
 			return PLAYER_ONE;
-		else if(getScore(board->cl[i]) == -4)
+		else if(getScore(board->win_lines[i]) == -4)
 			return PLAYER_TWO;
 	}
 	

@@ -26,10 +26,10 @@ struct board
 	int rows;
 
 	int *moves;
-	int lm;
+	int moves_made;
 
-	int cp;
-	point_type ***cl;
+	int curr_pl;
+	point_type ***win_lines;
 };
 
 point_type * newPoint(int a, int b);
@@ -42,7 +42,9 @@ void setState(point_type *point, int player);
 
 int getState(point_type *point);
 
-point_type*** generateCL(point_type ***grid);
+int getPlayer(board_type *board);
+
+point_type*** generateWinLines(point_type ***grid);
 
 board_type * createBoard(int a, int b);
 
@@ -59,8 +61,6 @@ int validMovesLeft(board_type *board);
 int getScore(point_type **points);
 
 int winnerIs(board_type *board);
-
-int cp(board_type *board);
 
 
 #endif

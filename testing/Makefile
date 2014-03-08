@@ -1,0 +1,25 @@
+CC = gcc 
+CFLAGS = -O3
+
+SOURCEDIR = ../
+INCDIR = ../
+OBJDIR = ../
+
+TESTBIN = test-all
+
+TESTOBJ = #test-all.o
+
+OBJS = test-all.o $(OBJDIR)ai_player.o $(OBJDIR)output.o $(OBJDIR)gameplay.o 
+
+LIBS = -lcunit -lm
+
+testbin: $(OBJS) Makefile
+	$(CC) $(CFLAGS) -o $(TESTBIN) $(TESTOBJ) $(OBJS) $(LIBS)
+
+$(SOURCEDIR)%.c: $(INCDIR)%.h
+
+%.o: $(SOURCEDIR)%.c
+	$(CC) $(CFLAGS) -c -o $@ $< 
+
+clean:
+	rm -rf $(TESTOBJ) $(TESTBIN)
