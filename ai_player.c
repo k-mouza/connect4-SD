@@ -91,7 +91,7 @@ int maxValue(board_type *board, int ply)
 	
 	for(i=0; i<columns; i++)
 	{
-		moves[i] = INT_MAX;
+		moves[i] = INT_MIN;
 		if(validMove(board, i))
 		{
 			makeMove(board, i);
@@ -101,7 +101,7 @@ int maxValue(board_type *board, int ply)
 			else 
 				moves[i] = -getStrength(board);
 			
-			if(moves[i] > moves[highest])
+			if(moves[i] >= moves[highest])
 				highest = i;
 			
 			undoMove(board);

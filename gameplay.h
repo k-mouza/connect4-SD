@@ -44,7 +44,7 @@ int getState(point_type *point);
 
 int getPlayer(board_type *board);
 
-point_type*** generateWinLines(point_type ***grid);
+point_type*** generateWinLines(point_type ***grid, int cols, int rows);
 
 board_type * createBoard(int a, int b);
 

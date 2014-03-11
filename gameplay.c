@@ -49,7 +49,7 @@ int getPlayer(board_type *board)
 }
 
 
-point_type*** generateWinLines(point_type ***grid)
+point_type*** generateWinLines(point_type ***grid, int cols, int rows)
 {
 	int i, y, x, t;
 	int count = 0;
@@ -70,9 +70,9 @@ point_type*** generateWinLines(point_type ***grid)
 		}
 	}
 */
-	for(y=0; y<6; y++)
+	for(y=0; y<rows; y++)
 	{
-		for(x=0; x<4; x++)
+		for(x=0; x<cols-3; x++)
 		{
 			point_type **temp = (point_type **)malloc(4 * sizeof(point_type *));
 			if(!temp)
@@ -90,9 +90,9 @@ point_type*** generateWinLines(point_type ***grid)
 		}
 	}
 
-	for(x=0; x<7; x++)
+	for(x=0; x<cols; x++)
 	{
-		for(y=0; y<3; y++)
+		for(y=0; y<rows-3; y++)
 		{
 			point_type **temp = (point_type **)malloc(4 * sizeof(point_type *));
 			if(!temp)
@@ -110,9 +110,9 @@ point_type*** generateWinLines(point_type ***grid)
 		}
 	}
 
-	for(x=0; x<4; x++)
+	for(x=0; x<cols-3; x++)
 	{
-		for(y=0; y<3; y++)
+		for(y=0; y<rows-3; y++)
 		{
 			point_type **temp = (point_type **)malloc(4 * sizeof(point_type *));
 			if(!temp)
@@ -130,9 +130,9 @@ point_type*** generateWinLines(point_type ***grid)
 		}
 	}
 	
-	for(x=0; x<4; x++)
+	for(x=0; x<cols-3; x++)
 	{
-		for(y=5; y>2; y--)
+		for(y=rows-1; y>=rows-3; y--)
 		{
 			point_type **temp = (point_type **)malloc(4 * sizeof(point_type *));
 			if(!temp)
@@ -158,6 +158,12 @@ board_type* createBoard(int a, int b)
 {
 	int x, y;
 
+	if( a<4 || b<4 )
+	{
+		printf("Board must at least be 4x4. Exiting...\n");
+		exit(-1);
+	}
+
 	board_type *board = (board_type*)malloc(sizeof(board_type));
 	if(!board)
 	{
@@ -179,7 +185,7 @@ board_type* createBoard(int a, int b)
 		exit(-1);
 	}
 
-	for(x = 0; x < board->cols; x++)
+	for(x=0; x<board->cols; x++)
 	{
 		board->grid[x] =(point_type **)malloc(board->rows * sizeof(point_type *));
 		if(!board->grid[x])
@@ -190,13 +196,13 @@ board_type* createBoard(int a, int b)
 		
 		board->heights[x] = 0;
 
-		for(y = 0; y< board->rows; y++)
+		for(y=0; y<board->rows; y++)
 		{
 			board->grid[x][y] = newPoint(x,y);
 		}
 	}
 	
-	board->win_lines = generateWinLines(board->grid);
+	board->win_lines = generateWinLines(board->grid, board->cols, board->rows);
 	
 	return board;
 }
@@ -264,7 +270,7 @@ int validMovesLeft(board_type *board)
 }
 
 
-int getScore(point_type **points)
+int getScore(point_type **win_line)
 {
 	int playerone=0;
 	int playertwo=0;
@@ -272,14 +278,14 @@ int getScore(point_type **points)
 	
 	for(i=0; i<4; i++)
 	{
-		if(getState(points[i]) == PLAYER_ONE)
+		if(getState(win_line[i]) == PLAYER_ONE)
 			playerone++;
-		else if(getState(points[i]) == PLAYER_TWO)
+		else if(getState(win_line[i]) == PLAYER_TWO)
 			playertwo++;
 	}
 	
-	if( (playerone+playertwo>0) && (!(playerone>0 && playertwo>0)) )
-		return (playerone != 0) ? playerone : playertwo;
+	if( (playerone + playertwo > 0) && (!(playerone > 0 && playertwo > 0)) )
+		return (playerone != 0) ? playerone : -playertwo;
 	else
 		return 0;
 }
