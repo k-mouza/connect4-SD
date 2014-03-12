@@ -60,12 +60,12 @@ void test_getPlayer(void)
 void test_createBoard(void)
 {
 	int i;
-	board_type *board = createBoard(4,5);
+	board_type *board = createBoard(4,5,PLAYER_TWO);
 	
 	CU_ASSERT_EQUAL(board->cols, 4);
 	CU_ASSERT_EQUAL(board->rows, 5);
 	CU_ASSERT_EQUAL(board->moves_made, -1);
-	CU_ASSERT_EQUAL(board->curr_pl, 1);
+	CU_ASSERT_EQUAL(board->curr_pl, PLAYER_TWO);
 	
 	for(i=0; i<4; i++)
 		CU_ASSERT_EQUAL(board->heights[i], 0);
@@ -110,7 +110,7 @@ void test_validMove(void)
 void test_makeMove(void)
 {
 	int state;
-	board_type *board = createBoard(7,6);
+	board_type *board = createBoard(7,6,PLAYER_ONE);
 	
 	makeMove(board, 3);
 	
@@ -125,7 +125,7 @@ void test_makeMove(void)
 void test_undoMove(void)
 {
 	int state;
-	board_type *board = createBoard(7,6);
+	board_type *board = createBoard(7,6,PLAYER_ONE);
 	makeMove(board, 3);
 	
 	undoMove(board);
@@ -140,7 +140,7 @@ void test_undoMove(void)
 void test_validMovesLeft(void)
 {
 	int ret, ret1;
-	board_type *board = createBoard(7,6);
+	board_type *board = createBoard(7,6,PLAYER_ONE);
 	
 	board->moves_made = 5;
 	ret = validMovesLeft(board);
@@ -194,7 +194,7 @@ void test_getScore(void)
 void test_winnerIs(void)
 {
 	int ret, ret1, ret2;
-	board_type *board = createBoard(7,6);
+	board_type *board = createBoard(7,6,PLAYER_ONE);
 	
 	board->win_lines[3][0]->state = PLAYER_ONE;
 	board->win_lines[3][1]->state = PLAYER_ONE;
@@ -228,7 +228,7 @@ void test_winnerIs(void)
 void test_getRandomPlayerMove(void)
 {
 	int ret, expected;
-	board_type *board = createBoard(7,6);
+	board_type *board = createBoard(7,6,PLAYER_ONE);
 	
 	srand(8);
 	ret = getRandomPlayerMove(board);
@@ -243,7 +243,7 @@ void test_getRandomPlayerMove(void)
 void test_getStrength(void)
 {
 	int ret, ret1;
-	board_type *board = createBoard(7,6);
+	board_type *board = createBoard(7,6,PLAYER_ONE);
 	
 	ret = getStrength(board);
 	

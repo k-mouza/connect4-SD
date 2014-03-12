@@ -1,4 +1,4 @@
-CC = gcc 
+CC = gcc
 CFLAGS = -O3
 
 SOURCEDIR = ../
@@ -7,14 +7,13 @@ OBJDIR = ../
 
 TESTBIN = test-all
 
-TESTOBJ = #test-all.o
-
-OBJS = test-all.o $(OBJDIR)ai_player.o $(OBJDIR)output.o $(OBJDIR)gameplay.o 
+TESTOBJ = test-all.o
+OBJS = $(TESTOBJ) $(OBJDIR)ai_player.o $(OBJDIR)output.o $(OBJDIR)gameplay.o
 
 LIBS = -lcunit -lm
 
 testbin: $(OBJS) Makefile
-	$(CC) $(CFLAGS) -o $(TESTBIN) $(TESTOBJ) $(OBJS) $(LIBS)
+	$(CC) $(CFLAGS) -o $(TESTBIN) $(OBJS) $(LIBS)
 
 $(SOURCEDIR)%.c: $(INCDIR)%.h
 

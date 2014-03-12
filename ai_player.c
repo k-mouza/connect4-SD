@@ -39,6 +39,9 @@ int getStrength(board_type *board)
 	int i;
 	int score;
 	
+	if (DIFFICULTY == DIFF_HARD)
+		weights[4] = 2600;
+		
 	for(i=0; i<QUARTETS; i++)
 	{
 		score = getScore(board->win_lines[i]);
@@ -66,7 +69,12 @@ int minValue(board_type *board, int ply)
 			makeMove(board, i);
 			
 			if( (winnerIs(board) == 0) && (ply > 0) )
-				moves[i] = maxValue(board, ply-1);
+			{
+				if (DIFFICULTY == DIFF_HARD)
+					moves[i] = maxValue_hard(board, ply-1);
+				else
+					moves[i] = maxValue_norm(board, ply-1);
+			}
 			else 
 				moves[i] = -getStrength(board);
 			
@@ -81,14 +89,14 @@ int minValue(board_type *board, int ply)
 
 
 //careful with this
-int maxValue(board_type *board, int ply)
+int maxValue_hard(board_type *board, int ply)
 {
 	//Replaced 7 with columns in whole function
 	int columns = board->cols;
 	int moves[columns];
 	int highest = 0;
 	int i;
-	
+		
 	for(i=0; i<columns; i++)
 	{
 		moves[i] = INT_MIN;
@@ -111,6 +119,36 @@ int maxValue(board_type *board, int ply)
 }
 
 
+int maxValue_norm(board_type *board, int ply)
+{
+	//Replaced 7 with columns in whole function
+	int columns = board->cols;
+	int moves[columns];
+	int highest = 0;
+	int i;
+		
+	for(i=0; i<columns; i++)
+	{
+		moves[i] = INT_MAX;
+		if(validMove(board, i))
+		{
+			makeMove(board, i);
+			
+			if( (winnerIs(board) == 0) && (ply > 0) )
+				moves[i] = minValue(board, ply-1);
+			else 
+				moves[i] = -getStrength(board);
+			
+			if(moves[i] < moves[highest])
+				highest = i;
+			
+			undoMove(board);
+		}
+	}
+	return moves[highest];
+}
+
+
 // should return a number
 int getReasonedMove(board_type *board)
 {
@@ -119,7 +157,7 @@ int getReasonedMove(board_type *board)
 	int moves[columns];
 	int highest = 0;
 	int i;
-	
+		
 	for(i=0; i<columns; i++)
 	{
 		moves[i] = INT_MIN;

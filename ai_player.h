@@ -9,7 +9,9 @@ int getStrength(board_type *board);
 
 int minValue(board_type *board, int ply);
 
-int maxValue(board_type *board, int ply);
+int maxValue_hard(board_type *board, int ply);
+
+int maxValue_norm(board_type *board, int ply);
 
 int getReasonedMove(board_type *board);
 

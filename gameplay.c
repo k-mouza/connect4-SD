@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include "gameplay.h"
+#include "ai_player.h"
 
 
 point_type* newPoint(int a, int b)
@@ -154,7 +155,7 @@ point_type*** generateWinLines(point_type ***grid, int cols, int rows)
 }
 
 
-board_type* createBoard(int a, int b)
+board_type* createBoard(int a, int b, int first_pl)
 {
 	int x, y;
 
@@ -174,7 +175,7 @@ board_type* createBoard(int a, int b)
 	board->cols = a;
 	board->rows = b;
 	board->moves_made = -1;
-	board->curr_pl = PLAYER_ONE;
+	board->curr_pl = first_pl;
 	board->heights = (int *)malloc(board->cols * sizeof(int));
 	board->grid = (point_type ***)malloc(board->cols * sizeof(point_type **));
 	board->moves = (int *)malloc(board->cols * board->rows * sizeof(int));
@@ -250,11 +251,45 @@ void makeMove(board_type *board, int column)
 	board->curr_pl = -board->curr_pl;
 }
 
+void human_play(board_type *board, int pl_id)
+{
+	int input;
+	
+	if (pl_id == PLAYER_ONE)
+		pl_id = 1;
+	else
+		pl_id = 2;
+	
+	do
+	{
+		printf("Player %d insert column number: ", pl_id);
+		scanf("%d", &input);
+		printf("\n");
+		
+		if(input < 1 || input > board->cols)
+			printf("Provide a column number between 1 and %d\n", board->cols);
+		else if(!validMove(board, input-1))
+			printf("Column is full. Choose another one.\n");
+		
+	}while( input < 1 || input > board->cols || !validMove(board, input-1) );
+	
+	makeMove(board, input-1);
+}
+
+void com_play(board_type *board)
+{
+	printf("Computer playing.\n\n");
+	
+	if (DIFFICULTY == DIFF_EASY)
+		makeMove(board, getRandomPlayerMove(board));
+	else
+		makeMove(board, getReasonedMove(board));
+}
 
 void undoMove(board_type *board)
 {
 	int column = board->moves[board->moves_made];
-	int row = board->heights[board->moves[board->moves_made]]-1;
+	int row = board->heights[column]-1;
 	
 	setState(board->grid[column][row], EMPTY);
 	
@@ -305,3 +340,40 @@ int winnerIs(board_type *board)
 	
 	return 0;
 }
+
+void parse_input(int *player2, int diffic, int *first_pl)
+{
+	switch (*player2)
+	{
+		case 1:
+			*player2 = COMPUTER;
+			break;
+		case 2:
+			*player2 = HUMAN;
+			break;
+	}
+	
+	switch (diffic)
+	{
+		case 1:
+			DIFFICULTY = DIFF_EASY;
+			break;
+		case 2:
+			DIFFICULTY = DIFF_NORM;
+			break;
+		case 3:
+			DIFFICULTY = DIFF_HARD;
+			break;
+	}
+	
+	switch (*first_pl)
+	{
+		case 1:
+			*first_pl = PLAYER_ONE;
+			break;
+		case 2:
+			*first_pl = PLAYER_TWO;
+			break;
+	}
+}
+
