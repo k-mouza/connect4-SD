@@ -4,6 +4,7 @@
 #include "gameplay.h"
 #include "ai_player.h"
 
+static int DIFFICULTY;
 
 point_type* newPoint(int a, int b)
 {
@@ -26,12 +27,6 @@ void deletepoint(point_type *point)
 }
 
 
-int equalsPosition(point_type *a, point_type *b)
-{
-	return (a->x == b->x) && (a->y == b->y); //added parenthesis for readability
-}
-
-
 void setState(point_type *point, int player)
 {
 	point->state = player;
@@ -50,7 +45,7 @@ int getPlayer(board_type *board)
 }
 
 
-point_type*** generateWinLines(point_type ***grid, int cols, int rows)
+static point_type*** generateWinLines(point_type ***grid, int cols, int rows)
 {
 	int i, y, x, t;
 	int count = 0;
@@ -262,7 +257,7 @@ void human_play(board_type *board, int pl_id)
 	
 	do
 	{
-		printf("Player %d insert column number: ", pl_id);
+		printf("Player %d insert column number (1-7): ", pl_id);
 		scanf("%d", &input);
 		printf("\n");
 		
@@ -280,7 +275,7 @@ void com_play(board_type *board)
 {
 	printf("Computer playing.\n\n");
 	
-	if (DIFFICULTY == DIFF_EASY)
+	if (getDifficulty() == DIFF_EASY)
 		makeMove(board, getRandomPlayerMove(board));
 	else
 		makeMove(board, getReasonedMove(board));
@@ -339,6 +334,11 @@ int winnerIs(board_type *board)
 	}
 	
 	return 0;
+}
+
+int getDifficulty(void)
+{
+	return DIFFICULTY;
 }
 
 void parse_input(int *player2, int diffic, int *first_pl)

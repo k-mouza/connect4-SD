@@ -7,11 +7,11 @@ int getRandomPlayerMove(board_type *board);
 
 int getStrength(board_type *board);
 
-int minValue(board_type *board, int ply);
+static int minValue(board_type *board, int ply);
 
-int maxValue_hard(board_type *board, int ply);
+static int maxValue_hard(board_type *board, int ply);
 
-int maxValue_norm(board_type *board, int ply);
+static int maxValue_norm(board_type *board, int ply);
 
 int getReasonedMove(board_type *board);
 

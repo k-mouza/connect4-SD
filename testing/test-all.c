@@ -8,9 +8,6 @@
 #include "../gameplay.h"
 
 
-double m_Tolerance = 1e-10;
-
-
 /*
  * Tests for functions of file gameplay.c
  */

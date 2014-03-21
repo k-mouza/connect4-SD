@@ -39,7 +39,7 @@ int getStrength(board_type *board)
 	int i;
 	int score;
 	
-	if (DIFFICULTY == DIFF_HARD)
+	if (getDifficulty() == DIFF_HARD)
 		weights[4] = 2600;
 		
 	for(i=0; i<QUARTETS; i++)
@@ -53,7 +53,7 @@ int getStrength(board_type *board)
 
 
 // don't change this unless you understand it
-int minValue(board_type *board, int ply)
+static int minValue(board_type *board, int ply)
 {
 	//Replaced 7 with columns in whole function
 	int columns = board->cols;
@@ -70,7 +70,7 @@ int minValue(board_type *board, int ply)
 			
 			if( (winnerIs(board) == 0) && (ply > 0) )
 			{
-				if (DIFFICULTY == DIFF_HARD)
+				if (getDifficulty() == DIFF_HARD)
 					moves[i] = maxValue_hard(board, ply-1);
 				else
 					moves[i] = maxValue_norm(board, ply-1);
@@ -89,7 +89,7 @@ int minValue(board_type *board, int ply)
 
 
 //careful with this
-int maxValue_hard(board_type *board, int ply)
+static int maxValue_hard(board_type *board, int ply)
 {
 	//Replaced 7 with columns in whole function
 	int columns = board->cols;
@@ -119,7 +119,7 @@ int maxValue_hard(board_type *board, int ply)
 }
 
 
-int maxValue_norm(board_type *board, int ply)
+static int maxValue_norm(board_type *board, int ply)
 {
 	//Replaced 7 with columns in whole function
 	int columns = board->cols;
