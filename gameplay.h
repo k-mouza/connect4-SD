@@ -27,17 +27,17 @@ struct point
 typedef struct board board_type;
 struct board
 {
-	point_type ***grid;
-	int *heights;
+	point_type ***grid;			// the grid of points
+	int *heights;				// the heights of each column
 
-	int cols;
-	int rows;
+	int cols;					// number of board columns
+	int rows;					// number of board rows
 
-	int *moves;
-	int moves_made;
+	int *moves;					// array which stores which column was played in each move
+	int moves_made;				// total number of moves made on the board
 
-	int curr_pl;
-	point_type ***win_lines;
+	int curr_pl;				// current player
+	point_type ***win_lines;	// all the winning quartets on the board
 };
 
 /*

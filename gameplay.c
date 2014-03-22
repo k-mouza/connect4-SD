@@ -16,7 +16,7 @@ point_type* newPoint(int a, int b)
 	}
 	point->x = a;
 	point->y = b;
-	point->state = EMPTY;
+	point->state = EMPTY; // no starting player
 	return point;
 }
 
@@ -66,6 +66,8 @@ static point_type*** generateWinLines(point_type ***grid, int cols, int rows)
 		}
 	}
 */
+	
+	// compute vertical winning lines
 	for(y=0; y<rows; y++)
 	{
 		for(x=0; x<cols-3; x++)
@@ -86,6 +88,7 @@ static point_type*** generateWinLines(point_type ***grid, int cols, int rows)
 		}
 	}
 
+	// compute horizontal winning lines
 	for(x=0; x<cols; x++)
 	{
 		for(y=0; y<rows-3; y++)
@@ -106,6 +109,7 @@ static point_type*** generateWinLines(point_type ***grid, int cols, int rows)
 		}
 	}
 
+	// compute diagonal (bottom left to top right) winning lines
 	for(x=0; x<cols-3; x++)
 	{
 		for(y=0; y<rows-3; y++)
@@ -126,6 +130,7 @@ static point_type*** generateWinLines(point_type ***grid, int cols, int rows)
 		}
 	}
 	
+	// compute diagonal (top left to bottom right) winning lines
 	for(x=0; x<cols-3; x++)
 	{
 		for(y=rows-1; y>=rows-3; y--)
@@ -181,6 +186,7 @@ board_type* createBoard(int a, int b, int first_pl)
 		exit(-1);
 	}
 
+	// allocate the grid points and set the heights of each column to 0
 	for(x=0; x<board->cols; x++)
 	{
 		board->grid[x] =(point_type **)malloc(board->rows * sizeof(point_type *));
@@ -236,14 +242,16 @@ int validMove(board_type *board, int column)
 
 void makeMove(board_type *board, int column)
 {
+	// the row of the grid is determined by the height of the given column
 	int row = board->heights[column];
 	
+	// set the state of the corresponding point to the current player
 	setState(board->grid[column][row], board->curr_pl);
 
-	board->heights[column]++;
-	board->moves_made++;
-	board->moves[board->moves_made] = column;
-	board->curr_pl = -board->curr_pl;
+	board->heights[column]++;					// increase the column height
+	board->moves_made++;						// increase the total moves made
+	board->moves[board->moves_made] = column;	// store the column played
+	board->curr_pl = -board->curr_pl;			// change the current player
 }
 
 void human_play(board_type *board, int pl_id)
@@ -283,14 +291,16 @@ void com_play(board_type *board)
 
 void undoMove(board_type *board)
 {
+	// find the last played column from the moves[] array
 	int column = board->moves[board->moves_made];
+	// the row of the grid is determined by the height of the above column
 	int row = board->heights[column]-1;
 	
-	setState(board->grid[column][row], EMPTY);
+	setState(board->grid[column][row], EMPTY); // set the state of the point to EMPTY
 	
-	board->heights[column]--;
-	board->moves_made--;
-	board->curr_pl = -board->curr_pl;
+	board->heights[column]--;			// decrease the column height
+	board->moves_made--;				// decrase the total moves made
+	board->curr_pl = -board->curr_pl;	// change current player
 }
 
 
@@ -327,6 +337,8 @@ int winnerIs(board_type *board)
 	
 	for(i=0; i<QUARTETS; i++)
 	{
+		// a score equal to 4 or -4 means that PLAYER_ONE or PLAYER_TWO, accordingly,
+		// has completed one of the winning quartets, so he is the winner
 		if(getScore(board->win_lines[i]) == 4)
 			return PLAYER_ONE;
 		else if(getScore(board->win_lines[i]) == -4)

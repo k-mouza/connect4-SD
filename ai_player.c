@@ -11,8 +11,9 @@ int getRandomPlayerMove(board_type *board)
 	int columns = board->cols;
 	int possible[columns];
 	int i;
-	int rand_col; //random column number between 0 and 6
+	int rand_col; 				//random column number between 0 and 6
 	
+	// check each column to see if it has space for another move
 	for(i=0; i<columns; i++)
 	{
 		if( validMove(board, i) )
@@ -21,6 +22,8 @@ int getRandomPlayerMove(board_type *board)
 			possible[i] = 0;
 	}
 
+	// generate a random number between 0 and 6
+	// if the column, that this number represents, is eligible for a move, return the number
 	while(ret == -1)
 	{
 		rand_col = rand() % (columns-1);
@@ -39,6 +42,9 @@ int getStrength(board_type *board)
 	int i;
 	int score;
 	
+	// the last element of the weights[] array is used when a player has 
+	// completed a winning line, which gives an extra weight (600) to the total
+	// move strength. If the difficulty is HARD then add even more (2600).
 	if (getDifficulty() == DIFF_HARD)
 		weights[4] = 2600;
 		
@@ -52,7 +58,7 @@ int getStrength(board_type *board)
 }
 
 
-// don't change this unless you understand it
+// the min function of the MIN-MAX AI algorithm
 static int minValue(board_type *board, int ply)
 {
 	//Replaced 7 with columns in whole function
@@ -88,7 +94,7 @@ static int minValue(board_type *board, int ply)
 }
 
 
-//careful with this
+// the max function of the MIN-MAX AI algorithm, for the HARD difficulty
 static int maxValue_hard(board_type *board, int ply)
 {
 	//Replaced 7 with columns in whole function
@@ -118,7 +124,7 @@ static int maxValue_hard(board_type *board, int ply)
 	return moves[highest];
 }
 
-
+// the max function of the MIN-MAX AI algorithm, for the NORMAL difficulty
 static int maxValue_norm(board_type *board, int ply)
 {
 	//Replaced 7 with columns in whole function
@@ -148,8 +154,8 @@ static int maxValue_norm(board_type *board, int ply)
 	return moves[highest];
 }
 
-
-// should return a number
+// this is basically the start of the MIN-MAX algorithm, and
+// it represents the MAX player
 int getReasonedMove(board_type *board)
 {
 	//Replaced 7 with columns in whole function

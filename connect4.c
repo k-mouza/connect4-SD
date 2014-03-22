@@ -23,8 +23,10 @@ int main(int argc, char **argv)
 	board = createBoard(7, 6, first_pl);
 	
 	if (first_pl == PLAYER_ONE || player2 == HUMAN)
+		// if the first player is human then print the empty board
 		toString(board);
 
+	// main loop that ends when a winner is found or when it is a tie
 	while((winnerIs(board)==0) && validMovesLeft(board))
 	{
 		if (getPlayer(board) == PLAYER_ONE)
@@ -37,6 +39,7 @@ int main(int argc, char **argv)
 		toString(board);
 	}
 	
+	// print the final winner or a message that it is a tie
 	if(winnerIs(board) == PLAYER_ONE)
 		printf("Player 1 is the winner !!!\n\n");
 	else if(winnerIs(board) == PLAYER_TWO)
