@@ -3,7 +3,7 @@ CFLAGS = -O3
 
 TESTDIR = testing/
 
-OBJ = connect4.o ai_player.o output.o gameplay.o
+OBJ = connect4.o ai_player.o output.o gameplay.o input.o
 EXEC = connect4
 
 MFLAGS = -w

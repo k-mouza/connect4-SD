@@ -3,6 +3,9 @@
 
 #include "gameplay.h"
 
-void toString(board_type *b);
+/*
+ * Outputs the current state of the given board, on stdout
+ */
+void toString(board_type *board);
 
 #endif
