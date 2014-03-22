@@ -1,9 +1,9 @@
 CC = gcc
 CFLAGS = -O3
 
-SOURCEDIR = ../
-INCDIR = ../
-OBJDIR = ../
+SOURCEDIR = ../src/
+INCDIR = ../include
+OBJDIR = $(SOURCEDIR)
 
 TESTBIN = test-all
 

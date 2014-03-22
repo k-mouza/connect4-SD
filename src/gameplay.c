@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "gameplay.h"
-#include "ai_player.h"
+#include "../include/gameplay.h"
+#include "../include/ai_player.h"
 
 static int DIFFICULTY;
 

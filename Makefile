@@ -2,8 +2,10 @@ CC = gcc
 CFLAGS = -O3
 
 TESTDIR = testing/
+INCDIR = include/
+SOURCEDIR = src/
 
-OBJ = connect4.o ai_player.o output.o gameplay.o input.o
+OBJ = $(SOURCEDIR)connect4.o $(SOURCEDIR)ai_player.o $(SOURCEDIR)output.o $(SOURCEDIR)gameplay.o $(SOURCEDIR)input.o
 EXEC = connect4
 
 MFLAGS = -w

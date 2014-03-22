@@ -3,9 +3,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "../ai_player.h"
-#include "../output.h"
-#include "../gameplay.h"
+#include "../include/ai_player.h"
+#include "../include/output.h"
+#include "../include/gameplay.h"
 
 
 /*

@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "input.h"
+#include "../include/input.h"
 
 void user_input(int *player2, int *difficulty, int *first_pl)
 {

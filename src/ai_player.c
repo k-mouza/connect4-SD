@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <limits.h>
 
-#include "ai_player.h"
+#include "../include/ai_player.h"
 
 int getRandomPlayerMove(board_type *board)
 {

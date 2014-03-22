@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "output.h"
+#include "../include/output.h"
 
 void toString(board_type *board)
 {

@@ -3,9 +3,9 @@
 #include <time.h>
 #include <string.h>
 
-#include "gameplay.h"
-#include "ai_player.h"
-#include "output.h"
+#include "../include/gameplay.h"
+#include "../include/ai_player.h"
+#include "../include/output.h"
 
 #define MAXNAME 20
 
