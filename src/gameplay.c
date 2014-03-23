@@ -5,6 +5,7 @@
 #include "../include/ai_player.h"
 
 static int DIFFICULTY;
+static int QUARTETS;	// total winning quartets in the board
 
 point_type* newPoint(int a, int b)
 {
@@ -45,18 +46,30 @@ int getPlayer(board_type *board)
 }
 
 
+int getDifficulty(void)
+{
+	return DIFFICULTY;
+}
+
+
+int getQuartets(void)
+{
+	return QUARTETS;
+}
+
+
 static point_type*** generateWinLines(point_type ***grid, int cols, int rows)
 {
 	int i, y, x, t;
 	int count = 0;
 	
-	point_type ***lines = (point_type ***)malloc(QUARTETS * sizeof(point_type **));
+	point_type ***lines = (point_type ***)malloc(getQuartets() * sizeof(point_type **));
 	if(!lines)
 	{
 		printf("Not enough memory. Exiting...\n");
 		exit(-1);
 	}
-/*	for(i=0; i<QUARTETS; i++)
+/*	for(i=0; i<getQuartets(); i++)
 	{
 		lines[i] = (point_type **)malloc(4 * sizeof(point_type *));
 		if(!lines[i])
@@ -133,7 +146,7 @@ static point_type*** generateWinLines(point_type ***grid, int cols, int rows)
 	// compute diagonal (top left to bottom right) winning lines
 	for(x=0; x<cols-3; x++)
 	{
-		for(y=rows-1; y>=rows-3; y--)
+		for(y=rows-1; y>2; y--)
 		{
 			point_type **temp = (point_type **)malloc(4 * sizeof(point_type *));
 			if(!temp)
@@ -204,6 +217,8 @@ board_type* createBoard(int a, int b, int first_pl)
 		}
 	}
 	
+	QUARTETS = board->rows*(board->cols-3) + board->cols*(board->rows-3) + 2*(board->cols-3)*(board->rows-3);
+	
 	board->win_lines = generateWinLines(board->grid, board->cols, board->rows);
 	
 	return board;
@@ -214,7 +229,7 @@ void deleteboard(board_type* board)
 {
 	int i, x, y;
 	
-	for(i=0; i<QUARTETS; i++)
+	for(i=0; i<getQuartets(); i++)
 		free(board->win_lines[i]);
 	free(board->win_lines);
 	
@@ -335,7 +350,7 @@ int winnerIs(board_type *board)
 {
 	int i;
 	
-	for(i=0; i<QUARTETS; i++)
+	for(i=0; i<getQuartets(); i++)
 	{
 		// a score equal to 4 or -4 means that PLAYER_ONE or PLAYER_TWO, accordingly,
 		// has completed one of the winning quartets, so he is the winner
@@ -348,10 +363,6 @@ int winnerIs(board_type *board)
 	return 0;
 }
 
-int getDifficulty(void)
-{
-	return DIFFICULTY;
-}
 
 void parse_input(int *player2, int diffic, int *first_pl)
 {

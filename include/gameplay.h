@@ -4,8 +4,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define QUARTETS 	69	// total winning quartets in a 7x6 grid
-
 #define PLAYER_ONE	1
 #define PLAYER_TWO	-1
 #define EMPTY	 	0
@@ -64,6 +62,17 @@ int getState(point_type *point);
  * Returns the current player for the given board
  */
 int getPlayer(board_type *board);
+
+/*
+ * Returns the difficulty that the user has set
+ * (DIFF_EASY, DIFF_NORM or DIFF_HARD)
+ */
+int getDifficulty(void);
+
+/*
+ * Returns the number of winning quartets of the board
+ */
+int getQuartets(void);
 
 /*
  * Allocates and returns an array of all the possible winning quartets of points
@@ -127,12 +136,6 @@ int getScore(point_type **points);
  * or 0 if nobody won yet
  */
 int winnerIs(board_type *board);
-
-/*
- * Returns the difficulty that the user has set
- * (DIFF_EASY, DIFF_NORM or DIFF_HARD)
- */
-int getDifficulty(void);
 
 /*
  * Sets the variables player2, first_pl and the static int DIFFICULTY

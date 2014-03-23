@@ -48,7 +48,7 @@ int getStrength(board_type *board)
 	if (getDifficulty() == DIFF_HARD)
 		weights[4] = 2600;
 		
-	for(i=0; i<QUARTETS; i++)
+	for(i=0; i<getQuartets(); i++)
 	{
 		score = getScore(board->win_lines[i]);
 		sum += (score > 0) ? weights[score] : -weights[-score];
