@@ -5,6 +5,8 @@ In order to play the game compile it and run it by typing:
 	$ make
 	$ ./connect4
 
+and then follow the on-screen instructions.
+
 The testing framework automatically compiles with the root Makefile. If you want to compile it separatelly then type:
 
 	$ cd testing/
