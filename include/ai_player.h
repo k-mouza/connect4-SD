@@ -15,8 +15,8 @@ int getRandomPlayerMove(board_type *board);
 int getStrength(board_type *board);
 
 /*
- * Min-Max AI algorithm that tests the strenght of all the possible moves
- * on the given board.
+ * Min-Max AI algorithm functions that test the strenght of all
+ * the possible moves on the given board.
  */
 static int minValue(board_type *board, int ply);
 static int maxValue_hard(board_type *board, int ply);
