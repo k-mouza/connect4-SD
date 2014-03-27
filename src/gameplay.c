@@ -271,7 +271,8 @@ void makeMove(board_type *board, int column)
 
 void human_play(board_type *board, int pl_id)
 {
-	int input;
+	int column;
+	char input, temp, temp1;
 	
 	if (pl_id == PLAYER_ONE)
 		pl_id = 1;
@@ -281,17 +282,25 @@ void human_play(board_type *board, int pl_id)
 	do
 	{
 		printf("Player %d insert column number (1-7): ", pl_id);
-		scanf("%d", &input);
+		
+		input = getchar();
+		temp = getchar();
 		printf("\n");
+
+		column = atoi(&input);
 		
-		if(input < 1 || input > board->cols)
-			printf("Provide a column number between 1 and %d\n", board->cols);
-		else if(!validMove(board, input-1))
-			printf("Column is full. Choose another one.\n");
+		if(column < 1 || column > board->cols || temp != '\n')
+		{
+			printf("Provide a column number between 1 and %d\n\n", board->cols);
+			if (temp != '\n')
+				while((temp1 = getchar()) != '\n' && temp1 != EOF);
+		}
+		else if(!validMove(board, column-1))
+			printf("Column is full. Choose another one.\n\n");
 		
-	}while( input < 1 || input > board->cols || !validMove(board, input-1) );
+	}while( column < 1 || column > board->cols || !validMove(board, column-1) || temp != '\n' );
 	
-	makeMove(board, input-1);
+	makeMove(board, column-1);
 }
 
 void com_play(board_type *board)
